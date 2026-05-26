@@ -44,3 +44,6 @@ packages = ["hsi-preprocessing-toolkit/__main__.py"]
 
 [project.scripts]
 hsi_preprocessing_toolkit = "hsi_preprocessing_toolkit.__main__:main"
+
+[project.gui-scripts]
+hsi_preprocessing_toolkit_gui = "hsi_preprocessing_toolkit.__main__:main"

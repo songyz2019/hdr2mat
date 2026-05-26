@@ -80,25 +80,30 @@ def generate_oblique_cube(front, top, right):
 
     a = int(d * 0.5 * 0.7071)
     W, H = w + a, h + a
-    canvas = np.ones((H, W, 3), dtype=np.uint8)
+    
 
-    # 加减1是为了防止出现缝隙，这也算是一种off by one了...
+    canvas = np.ones((H, W, 3), dtype=np.uint8) * 255
+
     canvas_r = cv2.warpAffine(right, 
         cv2.getAffineTransform(
             np.array([[0, 0], [0, h], [d, 0]], dtype=np.float32),
             np.array([[w, a], [w, H], [W, 0]], dtype=np.float32)),
         (W, H), flags=cv2.INTER_LANCZOS4)
+        
     canvas_t = cv2.warpAffine(top, 
         cv2.getAffineTransform(
             np.array([[0, 0], [0, w], [d, 0]], dtype=np.float32),
             np.array([[a, 0], [W, 0], [0, a]], dtype=np.float32)),
         (W, H), flags=cv2.INTER_LANCZOS4)
+
     canvas[a:H, 0:w] = front
 
     m_r = np.any(canvas_r > 0, axis=-1)
     m_t = np.any(canvas_t > 0, axis=-1)
+    
     canvas[m_r] = canvas_r[m_r]
     canvas[m_t] = canvas_t[m_t]
+    
     return canvas
 
 def compose_hsi_cube(hsi: np.ndarray, front: np.ndarray) -> (np.ndarray, np.ndarray, np.ndarray): 
